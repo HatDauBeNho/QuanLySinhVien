@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Charttt</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+</head>
+<body>
+<a href="/admin/dashboard" size="20px">Quay Lại</a>
+<h1 >Biểu đồ thống kê số tín chỉ môn học</h1>
+
+    <canvas id="myChart" th:style="'width: ' + ${500} + 'px; height: ' + ${500} + 'px;'"></canvas>
+    <script th:inline="javascript">
+        /* Lấy dữ liệu từ REST API */
+        var chartData = [[${charts}]] ;
+
+        if(chartData) {
+            /* Sử dụng dữ liệu để tạo biểu đồ */
+            var ctx = document.getElementById('myChart').getContext('2d');
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: chartData.map(data => data.subject_name),
+                    datasets: [{
+                        label: 'Biểu Đồ Số Tín Chỉ Môn Học',
+                        data: chartData.map(data => data.credit_hour),
+                        backgroundColor: 'rgba(2,111,252,0.2)',
+                        borderColor: 'rgb(10,101,238)',
+                        borderWidth: 1.2
+                    }]
+                },
+                options: {
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+    </script>
+
+
+</body>
+</html>
